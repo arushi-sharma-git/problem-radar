@@ -1,0 +1,6 @@
+venv/
+.env
+articles.json
+scrape.py
+__pycache__/
+*.pyc
