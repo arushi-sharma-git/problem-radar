@@ -4,3 +4,4 @@ articles.json
 scrape.py
 __pycache__/
 *.pyc
+debug_*.py
