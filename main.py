@@ -28,6 +28,10 @@ for source in SOURCES:
 
         embedding = get_embedding(text)
         duplicate = find_similar_article(conn, embedding)
-    if duplicate:
+        if duplicate:
             print(f"Skipping '{entry.title}' — near-duplicate of: {duplicate[0]}")
-    continue
+            continue
+
+        save_article(conn, entry.title, entry.link, text, source["domain"], source["tags"])
+        save_embedding(conn, entry.link, embedding)
+        print(f"Saved: {entry.title}")

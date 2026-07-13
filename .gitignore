@@ -6,3 +6,4 @@ __pycache__/
 *.pyc
 debug_*.py
 celerybeat-schedule
+test_available_models.py
