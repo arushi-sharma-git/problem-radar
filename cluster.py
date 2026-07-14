@@ -27,6 +27,18 @@ from llm import generate as call_gemini
 SECONDS_BETWEEN_LLM_CALLS = 15  # keeps us under the 5-requests/minute free-tier cap
 
 
+def get_cluster_article_map(article_ids, labels):
+    """Returns {cluster_label: [article_id, ...]}, skipping noise (-1).
+    This is the hookup point for insights.py — it needs to know which
+    article IDs belong to each cluster."""
+    mapping = {}
+    for label in sorted(set(labels)):
+        if label == -1:
+            continue
+        mapping[int(label)] = [article_ids[i] for i, l in enumerate(labels) if l == label]
+    return mapping
+
+
 # ---------- Step 1: Load embeddings ----------
 
 def load_embeddings():

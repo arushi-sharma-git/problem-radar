@@ -2,6 +2,7 @@ import os
 import time
 from dotenv import load_dotenv
 from google import genai
+from google.genai import types
 
 load_dotenv()
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
@@ -10,14 +11,22 @@ def summarize(text, max_retries=3):
     return generate("Summarize this in one sentence: " + text[:1000], max_retries=max_retries)
 
 
-def generate(prompt, max_retries=3):
+def generate(prompt, max_retries=3, temperature=None):
     """Generic Gemini call for any prompt (used by cluster.py for cluster tagging,
-    and reusable for insight extraction / idea generation prompts later)."""
+    and reusable for insight extraction / idea generation prompts later).
+
+    temperature: pass a low value (~0.2-0.3) for factual/grounded tasks like
+    insight extraction, and a higher value (~0.6-0.8) for creative tasks like
+    idea generation. Leave as None to use the model's default.
+    """
+    config = types.GenerateContentConfig(temperature=temperature) if temperature is not None else None
+
     for attempt in range(max_retries):
         try:
             response = client.models.generate_content(
                 model="gemini-3.1-flash-lite",
-                contents=prompt
+                contents=prompt,
+                config=config
             )
             return response.text
         except Exception as e:

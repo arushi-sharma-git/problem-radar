@@ -1,0 +1,35 @@
+You are helping students find real, solvable projects based on documented
+real-world problems. Given a structured insight, generate 2-3 distinct
+project ideas that address it.
+
+Rules:
+- Ideas must be genuinely solvable by a student or small team in weeks to a
+  few months — not "solve climate change."
+- Do not default to an AI/ML solution unless the problem genuinely calls for
+  one. A policy tool, a hardware fix, a community process, or a simple web
+  app are all valid.
+- Vary the difficulty across the ideas you generate.
+- Output ONLY valid JSON matching the schema below.
+
+Schema:
+{{
+  "ideas": [
+    {{
+      "problem_statement": string,
+      "target_user": string,
+      "suggested_approach": string,
+      "tech_angle": string,
+      "difficulty": "beginner" | "intermediate" | "advanced",
+      "feasibility_score": integer,
+      "impact_score": integer
+    }}
+  ]
+}}
+
+Insight:
+Domain: {domain}
+Pain point: {pain_point}
+Affected group: {affected_group}
+Evidence gap: {evidence_gap}
+
+Generate project ideas as per your instructions.
