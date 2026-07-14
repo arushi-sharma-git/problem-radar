@@ -1,0 +1,15 @@
+feedparser
+trafilatura
+sentence-transformers
+psycopg2-binary
+pgvector
+numpy
+umap-learn
+hdbscan
+google-genai
+python-dotenv
+pydantic
+fastapi
+uvicorn
+celery
+redis

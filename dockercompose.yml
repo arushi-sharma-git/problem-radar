@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  db:
+    image: ankane/pgvector
+    container_name: problem-radar-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: devpassword
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - problem_radar_pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis
+    container_name: problem-radar-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+volumes:
+  problem_radar_pgdata:

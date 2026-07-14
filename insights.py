@@ -19,7 +19,7 @@ import re
 import time
 from pydantic import ValidationError
 
-from db import get_connection
+from db import get_connection, setup_insights_tables, save_insight, save_ideas
 from llm import generate as call_gemini
 from schemas import Insight, IdeaList
 
@@ -182,11 +182,23 @@ def process_cluster(cluster_id, article_ids, use_cache=True):
     for idea in ideas.ideas:
         print(f"  - [{idea.difficulty}] {idea.problem_statement}")
 
+    # Persist to Postgres regardless of whether the above came from cache or
+    # a fresh API call — the DB is the source of truth the API will read from.
+    conn = get_connection()
+    insight_id = save_insight(conn, cluster_id, article_ids, insight)
+    save_ideas(conn, insight_id, ideas.ideas)
+    conn.close()
+    print(f"  [saved to Postgres: insight_id={insight_id}]")
+
     return insight, ideas
 
 
 if __name__ == "__main__":
     from cluster import load_embeddings, reduce_dimensions, run_hdbscan, get_cluster_article_map
+
+    setup_conn = get_connection()
+    setup_insights_tables(setup_conn)
+    setup_conn.close()
 
     article_ids, embeddings, metadata = load_embeddings()
     reduced = reduce_dimensions(embeddings)
