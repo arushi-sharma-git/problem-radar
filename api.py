@@ -9,6 +9,7 @@ that's your demo interface, no frontend code needed.
 """
 
 from fastapi import FastAPI, HTTPException, Query, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.requests import Request
 from psycopg2.extras import RealDictCursor
@@ -23,6 +24,16 @@ app = FastAPI(
     title="problem-radar API",
     description="Browse clusters of real-world problems, extracted insights, and student project ideas.",
     version="1.0.0",
+)
+
+# Allows the standalone frontend.html (opened as a local file, origin "null")
+# to call this API. Fine for a local demo; for real deployment, restrict
+# allow_origins to your actual frontend's domain instead of "*".
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["GET"],
+    allow_headers=["*"],
 )
 
 
